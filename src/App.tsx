@@ -26,6 +26,7 @@ export function App() {
   const modalTriggerRef = useRef<HTMLButtonElement | null>(null);
   const effectiveReducedMotion = systemReducedMotion || userMotionPaused;
   const paletteLabel = MESH_PALETTES[theme].label;
+  const interestCount = String(PORTFOLIO_CONTENT.interests.length).padStart(2, "0");
   const workCount = String(PORTFOLIO_CONTENT.works.length).padStart(2, "0");
 
   useEffect(() => {
@@ -84,8 +85,8 @@ export function App() {
             <p className="hero-sub">{PORTFOLIO_CONTENT.subhead}</p>
 
             <div className="hero-actions">
-              <a className="button-primary" href="#work">
-                View work
+              <a className="button-primary" href="#interests">
+                Interests
               </a>
               <a
                 className="link-secondary"
@@ -137,6 +138,32 @@ export function App() {
       </section>
 
       <main id="main" className="content-area">
+        <section id="interests" className="catalogue-section" aria-labelledby="interests-heading">
+          <div className="container section-grid">
+            <div className="section-rail">
+              <h2 id="interests-heading" className="section-label">
+                Interests
+              </h2>
+              <span className="section-count mono-figure">{interestCount}</span>
+            </div>
+
+            <div className="section-body">
+              <ul className="interest-list">
+                {PORTFOLIO_CONTENT.interests.map((item) => (
+                  <li key={item.index} className="interest-row">
+                    <span className="row-year mono-figure">{item.index}</span>
+                    <div className="interest-heading">
+                      <span className="interest-ja">{item.labelJa}</span>
+                      <span className="interest-en">{item.labelEn}</span>
+                    </div>
+                    <p className="interest-note">{item.note}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <section id="work" className="catalogue-section" aria-labelledby="work-heading">
           <div className="container section-grid">
             <div className="section-rail">
@@ -176,7 +203,7 @@ export function App() {
               )}
 
               <p className="section-footnote">
-                More projects will be listed here as they are published.
+                More projects and notes will be added here as they are published.
               </p>
             </div>
           </div>
@@ -196,12 +223,6 @@ export function App() {
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-
-              <ul className="discipline-list" aria-label="Focus areas">
-                {PORTFOLIO_CONTENT.disciplines.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
             </div>
           </div>
         </section>
