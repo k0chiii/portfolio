@@ -9,31 +9,30 @@ export interface MeshPalette {
 }
 
 /**
- * Pure neon-orange & golden-yellow palettes framed by quiet paper / obsidian.
- * Simultaneous contrast shifts perception of the same hue family across themes.
+ * Neon-orange & golden-yellow field palettes balanced with warm paper / obsidian.
  */
 export const MESH_PALETTES: Record<ThemeMode, MeshPalette> = {
   light: {
     base: "#f5f2eb",
     colors: [
-      "#f7efe2", // Warm Paper Highlight
-      "#ff5208", // Neon Orange
-      "#ffba1a", // Golden Amber Yellow
-      "#ffe66b", // Sunlit Citrus Yellow
-      "#de3700", // Deep Vermilion Accent
+      "#f6f2ea", // Warm Paper Ground
+      "#ff5e0e", // Neon Orange
+      "#ffb627", // Sunlit Amber Yellow
+      "#ffe066", // Luminous Lemon Highlight
+      "#d4d8d6", // Cool Architectural Slate
     ],
-    grainStrength: 0.032,
+    grainStrength: 0.028,
   },
   dark: {
     base: "#100f0e",
     colors: [
-      "#131110", // Obsidian Ground
-      "#ff4d00", // Neon Orange Core
-      "#ffb41a", // Molten Gold Yellow
-      "#ffe066", // Incandescent Yellow Crest
-      "#6b1c04", // Deep Ember Shadow
+      "#121110", // Obsidian Ground
+      "#ff5500", // Neon Orange Core
+      "#ffb31f", // Molten Golden Yellow
+      "#d96e08", // Warm Amber Glow
+      "#1e2228", // Cool Charcoal Counterweight
     ],
-    grainStrength: 0.038,
+    grainStrength: 0.036,
   },
 };
 

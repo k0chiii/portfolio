@@ -3,33 +3,47 @@
 
   --font-mono: "Commit Mono", ui-monospace, "Hiragino Kaku Gothic ProN", "Yu Gothic", monospace;
 
-  /* Paper & Ink — Light */
+  /* Warm neutral ramp — Light */
   --bg-page: #f5f2eb;
-  --text-primary: #181614;
+  --bg-raised: #ece6db;
+
+  --text-primary: #1a1816;
+  --text-secondary: #544d45;
   --text-muted: #6c655c;
-  --hairline: rgba(24, 22, 20, 0.12);
+
+  --hairline: rgba(26, 24, 22, 0.1);
+  --hairline-strong: rgba(26, 24, 22, 0.2);
+
   --accent: #d93d00;
 
-  --fallback-c1: #ff5208;
-  --fallback-c2: #ffba1a;
-  --fallback-c3: #ffe66b;
-  --fallback-c4: #de3700;
+  --fallback-c1: rgba(255, 94, 14, 0.82);
+  --fallback-c2: rgba(255, 182, 39, 0.78);
+  --fallback-c3: rgba(255, 224, 102, 0.68);
+  --fallback-c4: rgba(212, 216, 214, 0.52);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration-base: 200ms;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Obsidian & Paper — Dark */
+  /* Warm obsidian ramp — Dark */
   --bg-page: #100f0e;
-  --text-primary: #f2ece2;
-  --text-muted: #8a8278;
-  --hairline: rgba(242, 236, 226, 0.14);
-  --accent: #ff6a1a;
+  --bg-raised: #1e1c1a;
 
-  --fallback-c1: #ff4d00;
-  --fallback-c2: #ffb41a;
-  --fallback-c3: #ffe066;
-  --fallback-c4: #6b1c04;
+  --text-primary: #f2ece2;
+  --text-secondary: #aba49b;
+  --text-muted: #8a8278;
+
+  --hairline: rgba(242, 236, 226, 0.1);
+  --hairline-strong: rgba(242, 236, 226, 0.2);
+
+  --accent: #ff6b2b;
+
+  --fallback-c1: rgba(255, 85, 0, 0.82);
+  --fallback-c2: rgba(255, 179, 31, 0.68);
+  --fallback-c3: rgba(217, 110, 8, 0.66);
+  --fallback-c4: rgba(30, 34, 40, 0.65);
 }

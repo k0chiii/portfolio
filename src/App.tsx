@@ -46,68 +46,123 @@ export function App() {
   }, []);
 
   return (
-    <div className="sheet">
-      <header className="sheet-top">
-        <h1 className="sheet-name">{PORTFOLIO_CONTENT.name}</h1>
+    <div id="top" className="page">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
 
-        <nav className="sheet-actions" aria-label="Links and display">
-          {PORTFOLIO_CONTENT.links.map((link) => (
-            <a
-              key={link.label}
-              className="text-action"
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {link.label}
+      <section className="hero-field" aria-labelledby="hero-heading">
+        <MeshBackground theme={theme} reducedMotion={effectiveReducedMotion} />
+
+        <header className="site-header">
+          <div className="container header-inner">
+            <a className="brand-mark" href="#top">
+              <span>{PORTFOLIO_CONTENT.name}</span>
+              <span className="brand-place">{PORTFOLIO_CONTENT.place}</span>
             </a>
-          ))}
 
-          <button
-            type="button"
-            className="text-action"
-            onClick={handleToggleMotion}
-            aria-pressed={effectiveReducedMotion}
-          >
-            {effectiveReducedMotion ? "Play" : "Pause"}
-          </button>
+            <nav className="site-nav" aria-label="Primary">
+              {PORTFOLIO_CONTENT.entries.length > 0 && <a href="#index">Index</a>}
+              <a href="#links">Links</a>
+            </nav>
+          </div>
+        </header>
 
-          <button type="button" className="text-action" onClick={handleToggleTheme}>
-            {theme === "dark" ? "Light" : "Dark"}
-          </button>
-        </nav>
-      </header>
+        <div className="container hero-body">
+          <div className="hero-grid">
+            <div className="hero-spacer" aria-hidden="true" />
+            <h1 id="hero-heading" className="hero-title">
+              {PORTFOLIO_CONTENT.name}
+            </h1>
+          </div>
+        </div>
 
-      <main className="sheet-main">
-        <figure className="plate" aria-label="Interactive neon orange and yellow mesh gradient">
-          <MeshBackground theme={theme} reducedMotion={effectiveReducedMotion} />
-        </figure>
+        <div className="field-bar">
+          <div className="articulation-rule" aria-hidden="true" />
+          <div className="container field-bar-inner">
+            <span className="field-domain">{PORTFOLIO_CONTENT.domain}</span>
 
+            <div className="field-controls">
+              <button
+                type="button"
+                className="text-control"
+                onClick={handleToggleMotion}
+                aria-pressed={effectiveReducedMotion}
+              >
+                {effectiveReducedMotion ? "Play" : "Pause"}
+              </button>
+
+              <button
+                type="button"
+                className="text-control"
+                onClick={handleToggleTheme}
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? "Light" : "Dark"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main id="main" className="content-area">
         {PORTFOLIO_CONTENT.entries.length > 0 && (
-          <section className="bibliography" aria-label="Index">
-            <ul className="bibliography-list">
-              {PORTFOLIO_CONTENT.entries.map((entry) => (
-                <li key={entry.href}>
+          <section id="index" className="section-block" aria-labelledby="index-heading">
+            <div className="container section-grid">
+              <h2 id="index-heading" className="section-label">
+                Index
+              </h2>
+
+              <ul className="row-list attention-group">
+                {PORTFOLIO_CONTENT.entries.map((entry) => (
+                  <li key={entry.href}>
+                    <a
+                      className="index-row attention-item"
+                      href={entry.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="row-year">{entry.year}</span>
+                      <span className="row-title">{entry.title}</span>
+                      {entry.note && <span className="row-note">{entry.note}</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        <section id="links" className="section-block" aria-labelledby="links-heading">
+          <div className="container section-grid">
+            <h2 id="links-heading" className="section-label">
+              Links
+            </h2>
+
+            <ul className="row-list attention-group">
+              {PORTFOLIO_CONTENT.links.map((link) => (
+                <li key={link.label}>
                   <a
-                    className="bibliography-row"
-                    href={entry.href}
+                    className="link-row attention-item"
+                    href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <span className="bibliography-year">{entry.year}</span>
-                    <span className="bibliography-title">{entry.title}</span>
-                    {entry.note && <span className="bibliography-note">{entry.note}</span>}
+                    <span className="row-title">{link.label}</span>
+                    <span className="row-value">{link.value}</span>
                   </a>
                 </li>
               ))}
             </ul>
-          </section>
-        )}
+          </div>
+        </section>
       </main>
 
-      <footer className="sheet-bottom">
-        <span>{PORTFOLIO_CONTENT.domain}</span>
-        <span>{PORTFOLIO_CONTENT.place}</span>
+      <footer className="site-footer">
+        <div className="container footer-inner">
+          <span>{PORTFOLIO_CONTENT.domain}</span>
+          <span>© {new Date().getFullYear()}</span>
+        </div>
       </footer>
     </div>
   );

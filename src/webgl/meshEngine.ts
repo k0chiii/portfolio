@@ -31,7 +31,8 @@ export interface MeshEngineHandle {
 
 const MAX_DPR = 1.5;
 const COLOR_DAMP_LAMBDA = 4.2;
-const POINTER_DAMP_LAMBDA = 4.8;
+const POINTER_DAMP_LAMBDA = 5.0;
+const FOCUS_DAMP_LAMBDA = 4.5;
 const TRAIL_DECAY_LAMBDA = 0.72;
 const TRAIL_EMIT_COOLDOWN_MS = 140;
 
@@ -47,6 +48,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
   let reducedMotion = options.reducedMotion;
   let isDocumentHidden = typeof document !== "undefined" ? document.hidden : false;
   let isInView = true;
+  let pointerInside = false;
   let disposed = false;
   let rafId: number | null = null;
   let lastFrameMs = performance.now();
@@ -81,13 +83,13 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
   ];
   let targetColors = initialPalette.colors.map(toThreeColor) as [Color, Color, Color, Color, Color];
   let targetGrain = initialPalette.grainStrength;
+  let targetThemeMix = targetTheme === "dark" ? 1 : 0;
 
-  const currentPointer = new Vector2(0.5, 0.5);
-  const targetPointer = new Vector2(0.5, 0.5);
-  const lastPointer = new Vector2(0.5, 0.5);
+  const currentPointer = new Vector2(0.72, 0.48);
+  const targetPointer = new Vector2(0.72, 0.48);
+  const lastPointer = new Vector2(0.72, 0.48);
   const resolution = new Vector2(1, 1);
 
-  // 4 decaying memory traces: (x, y, strength, spinDirection)
   const trails: [Vector4, Vector4, Vector4, Vector4] = [
     new Vector4(0.5, 0.5, 0, 1),
     new Vector4(0.5, 0.5, 0, -1),
@@ -104,7 +106,9 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       uTime: { value: 0 },
       uResolution: { value: resolution },
       uPointer: { value: currentPointer },
+      uFocus: { value: 0 },
       uGrain: { value: initialPalette.grainStrength },
+      uThemeMix: { value: targetThemeMix },
       uTrail0: { value: trails[0] },
       uTrail1: { value: trails[1] },
       uTrail2: { value: trails[2] },
@@ -153,7 +157,10 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
         return false;
       }
     }
-    return Math.abs((material.uniforms.uGrain.value as number) - targetGrain) <= 0.0005;
+    const grainDone = Math.abs((material.uniforms.uGrain.value as number) - targetGrain) <= 0.0005;
+    const themeDone =
+      Math.abs((material.uniforms.uThemeMix.value as number) - targetThemeMix) <= 0.002;
+    return grainDone && themeDone;
   };
 
   const canAnimate = () => !disposed && !isDocumentHidden && isInView;
@@ -177,6 +184,13 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
     if (!reducedMotion) {
       elapsedSeconds += dt;
       material.uniforms.uTime.value = elapsedSeconds;
+
+      if (!pointerInside) {
+        targetPointer.set(
+          0.7 + 0.11 * Math.sin(elapsedSeconds * 0.34),
+          0.48 + 0.14 * Math.cos(elapsedSeconds * 0.27),
+        );
+      }
     }
 
     const colorAlpha = dampFactor(COLOR_DAMP_LAMBDA, dt);
@@ -187,6 +201,18 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       material.uniforms.uGrain.value as number,
       targetGrain,
       COLOR_DAMP_LAMBDA,
+      dt,
+    );
+    material.uniforms.uThemeMix.value = dampScalar(
+      material.uniforms.uThemeMix.value as number,
+      targetThemeMix,
+      COLOR_DAMP_LAMBDA,
+      dt,
+    );
+    material.uniforms.uFocus.value = dampScalar(
+      material.uniforms.uFocus.value as number,
+      pointerInside ? 1 : 0,
+      FOCUS_DAMP_LAMBDA,
       dt,
     );
 
@@ -267,6 +293,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       return;
     }
     const coords = toNormalized(event.clientX, event.clientY);
+    pointerInside = coords !== null;
     if (!coords) {
       return;
     }
@@ -281,7 +308,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
     if (speed > 0.014 && now - lastEmitMs >= TRAIL_EMIT_COOLDOWN_MS) {
       lastEmitMs = now;
       const spin = dx - dy >= 0 ? 1 : -1;
-      injectTrace(nx, ny, Math.min(0.45 + speed * 5.0, 0.95), spin);
+      injectTrace(nx, ny, Math.min(0.4 + speed * 4.5, 0.9), spin);
     }
   };
 
@@ -294,8 +321,13 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       return;
     }
     const [nx, ny] = coords;
+    pointerInside = true;
     targetPointer.set(nx, ny);
-    injectTrace(nx, ny, 1.0, nextTrailIndex % 2 === 0 ? 1 : -1);
+    injectTrace(nx, ny, 0.95, nextTrailIndex % 2 === 0 ? 1 : -1);
+  };
+
+  const handlePointerLeave = () => {
+    pointerInside = false;
   };
 
   const handleVisibilityChange = () => {
@@ -311,6 +343,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
 
   window.addEventListener("pointermove", handlePointerMove, { passive: true });
   window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+  document.documentElement.addEventListener("pointerleave", handlePointerLeave, { passive: true });
   document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost);
 
@@ -327,6 +360,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       const nextPalette = MESH_PALETTES[theme];
       targetColors = nextPalette.colors.map(toThreeColor) as [Color, Color, Color, Color, Color];
       targetGrain = nextPalette.grainStrength;
+      targetThemeMix = theme === "dark" ? 1 : 0;
 
       if (canAnimate()) {
         ensureRunning();
@@ -335,6 +369,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
           currentColors[i].copy(targetColors[i]);
         }
         material.uniforms.uGrain.value = targetGrain;
+        material.uniforms.uThemeMix.value = targetThemeMix;
         renderOnce();
       }
     },
@@ -344,10 +379,11 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       }
       reducedMotion = reduced;
       if (reduced) {
+        pointerInside = false;
         for (const trail of trails) {
           trail.z = 0;
         }
-        targetPointer.set(0.5, 0.5);
+        targetPointer.set(0.72, 0.48);
         if (stateSettled()) {
           stopLoop();
         }
@@ -362,6 +398,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       intersectionObserver.disconnect();
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerdown", handlePointerDown);
+      document.documentElement.removeEventListener("pointerleave", handlePointerLeave);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       canvas.removeEventListener("webglcontextlost", handleContextLost);
       geometry.dispose();
