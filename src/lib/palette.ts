@@ -3,40 +3,37 @@ import type { ThemeMode } from "./theme";
 export type RgbTuple = readonly [number, number, number];
 
 export interface MeshPalette {
-  readonly label: string;
   readonly base: string;
   readonly colors: readonly [string, string, string, string, string];
   readonly grainStrength: number;
 }
 
 /**
- * Neon-orange & sunlit-yellow palettes balanced with calm paper / obsidian grounds.
- * Color order: [ground, neon orange, golden yellow, warm solar highlight, cool counterweight]
+ * Pure neon-orange & golden-yellow palettes framed by quiet paper / obsidian.
+ * Simultaneous contrast shifts perception of the same hue family across themes.
  */
 export const MESH_PALETTES: Record<ThemeMode, MeshPalette> = {
   light: {
-    label: "Solar & Paper",
-    base: "#f7f4ee",
+    base: "#f5f2eb",
     colors: [
-      "#f6f2ea", // Warm Paper Ground
-      "#ff5e0e", // Neon Orange
-      "#ffb627", // Sunlit Amber Yellow
-      "#ffe066", // Luminous Lemon Highlight
-      "#d4d8d6", // Cool Architectural Slate
+      "#f7efe2", // Warm Paper Highlight
+      "#ff5208", // Neon Orange
+      "#ffba1a", // Golden Amber Yellow
+      "#ffe66b", // Sunlit Citrus Yellow
+      "#de3700", // Deep Vermilion Accent
     ],
-    grainStrength: 0.028,
+    grainStrength: 0.032,
   },
   dark: {
-    label: "Ember & Gold",
-    base: "#121110",
+    base: "#100f0e",
     colors: [
-      "#121110", // Obsidian Ground
-      "#ff5500", // Neon Orange Core
-      "#ffb31f", // Molten Golden Yellow
-      "#d96e08", // Warm Amber Glow
-      "#1e2228", // Cool Charcoal Counterweight
+      "#131110", // Obsidian Ground
+      "#ff4d00", // Neon Orange Core
+      "#ffb41a", // Molten Gold Yellow
+      "#ffe066", // Incandescent Yellow Crest
+      "#6b1c04", // Deep Ember Shadow
     ],
-    grainStrength: 0.036,
+    grainStrength: 0.038,
   },
 };
 

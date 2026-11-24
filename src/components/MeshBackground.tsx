@@ -1,27 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 
 import type { ThemeMode } from "../lib/theme";
-import type { FieldSample, MeshEngineHandle } from "../webgl/meshEngine";
+import type { MeshEngineHandle } from "../webgl/meshEngine";
 
 interface MeshBackgroundProps {
   theme: ThemeMode;
   reducedMotion: boolean;
-  onSample?: (sample: FieldSample) => void;
 }
 
-export function MeshBackground({ theme, reducedMotion, onSample }: MeshBackgroundProps) {
+export function MeshBackground({ theme, reducedMotion }: MeshBackgroundProps) {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engineRef = useRef<MeshEngineHandle | null>(null);
   const initialThemeRef = useRef(theme);
   const initialReducedRef = useRef(reducedMotion);
-  const onSampleRef = useRef(onSample);
   const [webglReady, setWebglReady] = useState(false);
   const [webglFailed, setWebglFailed] = useState(false);
-
-  useEffect(() => {
-    onSampleRef.current = onSample;
-  }, [onSample]);
 
   useEffect(() => {
     let cancelled = false;
@@ -44,9 +38,6 @@ export function MeshBackground({ theme, reducedMotion, onSample }: MeshBackgroun
           container,
           initialTheme: initialThemeRef.current,
           reducedMotion: initialReducedRef.current,
-          onSample: (sample) => {
-            onSampleRef.current?.(sample);
-          },
           onContextLost: () => {
             setWebglReady(false);
             setWebglFailed(true);

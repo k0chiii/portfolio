@@ -3,8 +3,8 @@ export type ThemeMode = "light" | "dark";
 export const THEME_STORAGE_KEY = "portfolio-theme";
 
 export const THEME_META_COLORS: Record<ThemeMode, string> = {
-  light: "#f7f4ee",
-  dark: "#121110",
+  light: "#f5f2eb",
+  dark: "#100f0e",
 };
 
 export function resolveInitialTheme(

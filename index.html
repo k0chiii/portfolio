@@ -3,17 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="k0chi — personal site and index." />
-    <meta name="theme-color" content="#f7f4ee" />
+    <meta name="description" content="k0chi" />
+    <meta name="theme-color" content="#f5f2eb" />
     <title>k0chi</title>
     <link rel="icon" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap"
-    />
     <script>
       (() => {
         try {
@@ -24,7 +18,7 @@
           document.documentElement.dataset.theme = theme;
           const meta = document.querySelector('meta[name="theme-color"]');
           if (meta) {
-            meta.setAttribute("content", theme === "dark" ? "#121110" : "#f7f4ee");
+            meta.setAttribute("content", theme === "dark" ? "#100f0e" : "#f5f2eb");
           }
         } catch {
           document.documentElement.dataset.theme = "light";

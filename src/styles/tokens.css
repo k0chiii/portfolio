@@ -1,68 +1,36 @@
 :root {
   color-scheme: light;
 
-  --font-display: "Instrument Serif", "Iowan Old Style", "Hiragino Mincho ProN", Georgia, serif;
   --font-sans:
-    "Instrument Sans", -apple-system, BlinkMacSystemFont, "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Monaco, monospace;
+    "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Arial, sans-serif;
 
-  /* Warm neutral ramp — Light */
-  --bg-page: #f7f4ee;
-  --bg-surface: #fdfbf7;
-  --bg-raised: #efe9df;
-
-  --text-primary: #1c1917;
-  --text-secondary: #564f47;
-  --text-muted: #6d655c;
-
-  --hairline: rgba(28, 25, 23, 0.1);
-  --hairline-strong: rgba(28, 25, 23, 0.2);
-
-  /* Single neon-orange accent family */
+  /* Paper & Ink — Light */
+  --bg-page: #f5f2eb;
+  --text-primary: #181614;
+  --text-muted: #6c655c;
+  --hairline: rgba(24, 22, 20, 0.12);
   --accent: #d93d00;
-  --accent-signal: #ff4f14;
-  --button-fill: #1c1917;
-  --button-text: #f7f4ee;
-  --control-hover: rgba(28, 25, 23, 0.06);
 
-  --fallback-c1: rgba(255, 94, 14, 0.82);
-  --fallback-c2: rgba(255, 182, 39, 0.78);
-  --fallback-c3: rgba(255, 224, 102, 0.68);
-  --fallback-c4: rgba(212, 216, 214, 0.52);
+  --fallback-c1: #ff5208;
+  --fallback-c2: #ffba1a;
+  --fallback-c3: #ffe66b;
+  --fallback-c4: #de3700;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-fast: 140ms;
-  --duration-base: 200ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Warm obsidian ramp — Dark */
-  --bg-page: #121110;
-  --bg-surface: #1a1817;
-  --bg-raised: #24211f;
+  /* Obsidian & Paper — Dark */
+  --bg-page: #100f0e;
+  --text-primary: #f2ece2;
+  --text-muted: #8a8278;
+  --hairline: rgba(242, 236, 226, 0.14);
+  --accent: #ff6a1a;
 
-  --text-primary: #f2ece4;
-  --text-secondary: #ada69d;
-  --text-muted: #8c857c;
-
-  --hairline: rgba(242, 236, 228, 0.1);
-  --hairline-strong: rgba(242, 236, 228, 0.2);
-
-  --accent: #ff6b2b;
-  --accent-signal: #ff4d00;
-  --button-fill: #f2ece4;
-  --button-text: #121110;
-  --control-hover: rgba(242, 236, 228, 0.08);
-
-  --fallback-c1: rgba(255, 85, 0, 0.82);
-  --fallback-c2: rgba(255, 179, 31, 0.68);
-  --fallback-c3: rgba(217, 110, 8, 0.66);
-  --fallback-c4: rgba(30, 34, 40, 0.65);
+  --fallback-c1: #ff4d00;
+  --fallback-c2: #ffb41a;
+  --fallback-c3: #ffe066;
+  --fallback-c4: #6b1c04;
 }
