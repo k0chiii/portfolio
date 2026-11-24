@@ -10,33 +10,33 @@ export interface MeshPalette {
 }
 
 /**
- * Neon-orange driven palettes balanced with calm paper / obsidian grounds.
- * Color order: [ground, primary neon orange, hot ember/tangerine, warm wash, cool counterweight]
+ * Neon-orange & sunlit-yellow palettes balanced with calm paper / obsidian grounds.
+ * Color order: [ground, neon orange, golden yellow, warm solar highlight, cool counterweight]
  */
 export const MESH_PALETTES: Record<ThemeMode, MeshPalette> = {
   light: {
-    label: "Vermilion & Paper",
+    label: "Solar & Paper",
     base: "#f7f4ee",
     colors: [
       "#f6f2ea", // Warm Paper Ground
-      "#ff4f14", // Neon International Orange
-      "#ff8238", // Bright Tangerine Glow
-      "#f0c8ad", // Soft Apricot Wash
-      "#cfd4d6", // Cool Architectural Slate
+      "#ff5e0e", // Neon Orange
+      "#ffb627", // Sunlit Amber Yellow
+      "#ffe066", // Luminous Lemon Highlight
+      "#d4d8d6", // Cool Architectural Slate
     ],
-    grainStrength: 0.03,
+    grainStrength: 0.028,
   },
   dark: {
-    label: "Ember & Obsidian",
+    label: "Ember & Gold",
     base: "#121110",
     colors: [
       "#121110", // Obsidian Ground
-      "#ff4d00", // Neon Orange Core
-      "#ff7b24", // Hot Amber Edge
-      "#6e1d08", // Deep Vermilion Shadow
-      "#1d2229", // Cool Charcoal Counterweight
+      "#ff5500", // Neon Orange Core
+      "#ffb31f", // Molten Golden Yellow
+      "#d96e08", // Warm Amber Glow
+      "#1e2228", // Cool Charcoal Counterweight
     ],
-    grainStrength: 0.038,
+    grainStrength: 0.036,
   },
 };
 

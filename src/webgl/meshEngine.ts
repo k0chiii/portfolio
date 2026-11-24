@@ -30,7 +30,7 @@ export interface MeshEngineHandle {
 
 const MAX_DPR = 1.5;
 const COLOR_DAMP_LAMBDA = 4.2;
-const POINTER_DAMP_LAMBDA = 3.0;
+const POINTER_DAMP_LAMBDA = 4.6;
 
 function toThreeColor(hex: string): Color {
   const [r, g, b] = hexToRgbNormalized(hex);

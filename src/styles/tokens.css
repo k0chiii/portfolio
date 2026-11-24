@@ -26,10 +26,10 @@
   --button-text: #f7f4ee;
   --control-hover: rgba(28, 25, 23, 0.06);
 
-  --fallback-c1: rgba(255, 79, 20, 0.78);
-  --fallback-c2: rgba(255, 130, 56, 0.68);
-  --fallback-c3: rgba(240, 200, 173, 0.62);
-  --fallback-c4: rgba(207, 212, 214, 0.56);
+  --fallback-c1: rgba(255, 94, 14, 0.82);
+  --fallback-c2: rgba(255, 182, 39, 0.78);
+  --fallback-c3: rgba(255, 224, 102, 0.68);
+  --fallback-c4: rgba(212, 216, 214, 0.52);
 
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -61,8 +61,8 @@
   --button-text: #121110;
   --control-hover: rgba(242, 236, 228, 0.08);
 
-  --fallback-c1: rgba(255, 77, 0, 0.78);
-  --fallback-c2: rgba(255, 123, 36, 0.58);
-  --fallback-c3: rgba(110, 29, 8, 0.76);
-  --fallback-c4: rgba(29, 34, 41, 0.7);
+  --fallback-c1: rgba(255, 85, 0, 0.82);
+  --fallback-c2: rgba(255, 179, 31, 0.68);
+  --fallback-c3: rgba(217, 110, 8, 0.66);
+  --fallback-c4: rgba(30, 34, 40, 0.65);
 }
