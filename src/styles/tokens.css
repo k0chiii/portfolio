@@ -1,8 +1,7 @@
 :root {
   color-scheme: light;
 
-  --font-sans:
-    "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Arial, sans-serif;
+  --font-mono: "Commit Mono", ui-monospace, "Hiragino Kaku Gothic ProN", "Yu Gothic", monospace;
 
   /* Paper & Ink — Light */
   --bg-page: #f5f2eb;
