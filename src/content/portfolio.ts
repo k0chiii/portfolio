@@ -1,108 +1,68 @@
 export interface WorkItem {
   readonly id: string;
-  readonly index: string;
+  readonly year: string;
   readonly title: string;
   readonly category: string;
-  readonly year: string;
   readonly summary: string;
   readonly detail: string;
-  readonly role: string;
   readonly stack: readonly string[];
-  readonly accent: readonly [string, string];
   readonly url?: string;
 }
 
 export interface LinkItem {
   readonly label: string;
   readonly href: string;
-  readonly handle: string;
+  readonly value: string;
 }
 
 export interface PortfolioContent {
-  readonly monogram: string;
-  readonly name: string;
-  readonly role: string;
-  readonly location: string;
-  readonly availability: string;
-  readonly heroLead: string;
-  readonly heroSub: string;
-  readonly aboutTitle: string;
+  readonly brand: string;
+  readonly domain: string;
+  readonly headline: string;
+  readonly subhead: string;
   readonly aboutParagraphs: readonly string[];
-  readonly focusAreas: readonly string[];
-  readonly email: string;
+  readonly disciplines: readonly string[];
   readonly works: readonly WorkItem[];
   readonly links: readonly LinkItem[];
 }
 
 /**
- * Single source of truth for portfolio copy and works.
- * Replace these placeholders whenever your final content is ready.
+ * Portfolio content source.
+ * Edit this file to add works, biography, and links.
  */
 export const PORTFOLIO_CONTENT: PortfolioContent = {
-  monogram: "K.",
-  name: "Your Name",
-  role: "Design Engineer / Creative Developer",
-  location: "Tokyo, JP",
-  availability: "Draft — Content in progress",
-  heroLead: "Quiet interfaces shaped by light, motion, and crisp engineering.",
-  heroSub:
-    "内容はこれから決めていくポートフォリオの土台です。ニュートラルなメッシュグラデーションと軽快なパフォーマンスを軸に設計しています。",
-  aboutTitle: "About",
+  brand: "k0chi",
+  domain: "k0chi.dev",
+  headline: "Notes, interfaces, and small software",
+  subhead: "k0chi の個人サイト。つくったものや実験をここにまとめていきます。",
   aboutParagraphs: [
-    "ここに自己紹介や大切にしているスタンスが入ります。デザインとフロントエンド実装のあいだを行き来しながら、触っていて心地よいプロダクトやWeb体験をつくる、といった文章に差し替えられます。",
-    "すべてのテキスト・作品・リンクは src/content/portfolio.ts に分離しているため、レイアウトやシェーダーを触らずにいつでも更新できます。",
+    "東京を拠点にソフトウェアとインターフェースをつくっています。",
+    "プロフィールや制作実績は準備でき次第ここへ追加していきます。テキスト・作品・リンクはすべて src/content/portfolio.ts から更新できる構成です。",
   ],
-  focusAreas: [
-    "Interface Design",
-    "Frontend Architecture",
-    "WebGL / Creative Coding",
-    "Edge Performance",
-  ],
-  email: "hello@example.com",
+  disciplines: ["Web interfaces", "Frontend engineering", "WebGL shaders", "Edge infrastructure"],
   works: [
     {
-      id: "project-01",
-      index: "01",
-      title: "Project Placeholder I",
-      category: "Web Application",
+      id: "k0chi-dev",
       year: "2026",
-      summary: "代表作の1つ目を置くスロット。UI設計とフロントエンド実装のハイライト。",
+      title: "k0chi.dev",
+      category: "Personal site",
+      summary: "Three.js のカスタムシェーダーと Vite+ / Cloudflare Workers で構成した個人サイト",
       detail:
-        "ここにプロジェクトの背景、課題、アプローチ、工夫した細部を記載します。画像やリンクを後から追加しやすい構成にしています。",
-      role: "Design & Engineering",
-      stack: ["TypeScript", "React", "Cloudflare Workers"],
-      accent: ["#d7c6b6", "#b7c6c9"],
-    },
-    {
-      id: "project-02",
-      index: "02",
-      title: "Project Placeholder II",
-      category: "Visual Experiment",
-      year: "2026",
-      summary: "シェーダーやインタラクション表現など、視覚的な実験作品の枠。",
-      detail:
-        "動きの気持ちよさと描画負荷のバランスをどう設計したか、技術的なこだわりや設計メモをまとめるスペースです。",
-      role: "Creative Development",
-      stack: ["Three.js", "GLSL", "Vite+"],
-      accent: ["#d0bab5", "#c3cbbd"],
-    },
-    {
-      id: "project-03",
-      index: "03",
-      title: "Project Placeholder III",
-      category: "Design System",
-      year: "2025",
-      summary: "デザインシステムやツール、OSSなど継続的に育てているものの枠。",
-      detail:
-        "コンポーネント設計の思想や、チーム開発での活用実績・改善効果などを簡潔に紹介できます。",
-      role: "Architecture & UI",
-      stack: ["Design Tokens", "CSS", "Accessibility"],
-      accent: ["#b7c6c9", "#d7c6b6"],
+        "ファーストビューのメッシュグラデーションのみを Three.js の遅延読み込みチャンクで描画し、スクロールで画面外に出ると描画ループを自動停止する構成。ライト／ダーク切替では5色の顔料パレットをシェーダー内で補間している。",
+      stack: ["React", "Three.js", "Vite+", "Cloudflare Workers"],
+      url: "https://github.com/k0chiii/portfolio",
     },
   ],
   links: [
-    { label: "GitHub", href: "https://github.com", handle: "@your-handle" },
-    { label: "X / Twitter", href: "https://x.com", handle: "@your-handle" },
-    { label: "Note / Blog", href: "https://note.com", handle: "Writing" },
+    {
+      label: "GitHub",
+      href: "https://github.com/k0chiii",
+      value: "github.com/k0chiii",
+    },
+    {
+      label: "Site",
+      href: "https://k0chi.dev",
+      value: "k0chi.dev",
+    },
   ],
 };

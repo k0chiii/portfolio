@@ -3,37 +3,39 @@ import type { ThemeMode } from "./theme";
 export type RgbTuple = readonly [number, number, number];
 
 export interface MeshPalette {
+  readonly label: string;
   readonly base: string;
   readonly colors: readonly [string, string, string, string, string];
   readonly grainStrength: number;
 }
 
 /**
- * Neutral, art-directed muted palettes inspired by mineral pigments & fine paper.
- * Light: "Paper & Mist" / Dark: "Obsidian & Velvet"
+ * Neutral mineral palettes paired with warm paper & ink surfaces.
  */
 export const MESH_PALETTES: Record<ThemeMode, MeshPalette> = {
   light: {
-    base: "#f3f0ea",
+    label: "Paper & Mist",
+    base: "#f7f4ee",
     colors: [
-      "#f4f0e8", // Warm Ivory Paper
-      "#d7c6b6", // Muted Clay Sand
-      "#b7c6c9", // Dusty Slate Mist
-      "#d0bab5", // Faded Terracotta Rose
-      "#c3cbbd", // Soft Sage Ash
+      "#f5f1e9", // Warm Paper
+      "#d5bfa9", // Raw Clay
+      "#b2c3c6", // Slate Mist
+      "#ccaead", // Faded Rose Ochre
+      "#c0cab9", // Mineral Sage
     ],
-    grainStrength: 0.028,
+    grainStrength: 0.026,
   },
   dark: {
-    base: "#111214",
+    label: "Obsidian & Velvet",
+    base: "#141312",
     colors: [
-      "#121317", // Obsidian Ground
-      "#232b38", // Deep Indigo Slate
-      "#33272c", // Muted Plum Umber
-      "#1d2e2d", // Deep Pine Fog
-      "#3f332c", // Smoked Bronze
+      "#151413", // Warm Obsidian
+      "#273140", // Deep Slate
+      "#39282b", // Smoked Plum
+      "#1e302e", // Pine Shadow
+      "#47372c", // Umber Bronze
     ],
-    grainStrength: 0.038,
+    grainStrength: 0.036,
   },
 };
 

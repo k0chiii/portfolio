@@ -16,6 +16,7 @@ import { MESH_FRAGMENT_SHADER, MESH_VERTEX_SHADER } from "./shaders";
 
 export interface MeshEngineOptions {
   canvas: HTMLCanvasElement;
+  container: HTMLElement;
   initialTheme: ThemeMode;
   reducedMotion: boolean;
   onContextLost?: () => void;
@@ -29,7 +30,7 @@ export interface MeshEngineHandle {
 
 const MAX_DPR = 1.5;
 const COLOR_DAMP_LAMBDA = 4.2;
-const POINTER_DAMP_LAMBDA = 3.2;
+const POINTER_DAMP_LAMBDA = 3.0;
 
 function toThreeColor(hex: string): Color {
   const [r, g, b] = hexToRgbNormalized(hex);
@@ -37,11 +38,12 @@ function toThreeColor(hex: string): Color {
 }
 
 export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
-  const { canvas, onContextLost } = options;
+  const { canvas, container, onContextLost } = options;
 
   let targetTheme: ThemeMode = options.initialTheme;
   let reducedMotion = options.reducedMotion;
-  let isHidden = typeof document !== "undefined" ? document.hidden : false;
+  let isDocumentHidden = typeof document !== "undefined" ? document.hidden : false;
+  let isInView = true;
   let disposed = false;
   let rafId: number | null = null;
   let lastFrameMs = performance.now();
@@ -60,7 +62,6 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
   const scene = new Scene();
   const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-  // Single fullscreen triangle (3 vertices, no diagonal seam)
   const geometry = new BufferGeometry();
   const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
   geometry.setAttribute("position", new BufferAttribute(vertices, 3));
@@ -103,8 +104,9 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
   scene.add(mesh);
 
   const resize = () => {
-    const width = Math.max(window.innerWidth, 1);
-    const height = Math.max(window.innerHeight, 1);
+    const rect = container.getBoundingClientRect();
+    const width = Math.max(Math.round(rect.width), 1);
+    const height = Math.max(Math.round(rect.height), 1);
     const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     renderer.setPixelRatio(dpr);
     renderer.setSize(width, height, false);
@@ -131,6 +133,8 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
     return Math.abs((material.uniforms.uGrain.value as number) - targetGrain) <= 0.0005;
   };
 
+  const canAnimate = () => !disposed && !isDocumentHidden && isInView;
+
   const stopLoop = () => {
     if (rafId !== null) {
       window.cancelAnimationFrame(rafId);
@@ -140,7 +144,7 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
 
   const step = (now: number) => {
     rafId = null;
-    if (disposed || isHidden) {
+    if (!canAnimate()) {
       return;
     }
 
@@ -168,41 +172,61 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
 
     renderOnce();
 
-    // Keep animating when motion is enabled, or while a theme color transition is still settling.
     if (!reducedMotion || !colorsConverged()) {
       rafId = window.requestAnimationFrame(step);
     }
   };
 
   const ensureRunning = () => {
-    if (disposed || isHidden || rafId !== null) {
+    if (!canAnimate() || rafId !== null) {
       return;
     }
     lastFrameMs = performance.now();
     rafId = window.requestAnimationFrame(step);
   };
 
-  const handleResize = () => {
-    resize();
-    renderOnce();
-  };
-
-  const handlePointerMove = (event: PointerEvent) => {
-    if (reducedMotion || event.pointerType === "touch") {
+  const syncPlayback = () => {
+    if (!canAnimate()) {
+      stopLoop();
       return;
     }
-    const nx = event.clientX / Math.max(window.innerWidth, 1);
-    const ny = 1 - event.clientY / Math.max(window.innerHeight, 1);
+    if (!reducedMotion || !colorsConverged()) {
+      ensureRunning();
+    }
+  };
+
+  const resizeObserver = new ResizeObserver(() => {
+    resize();
+    renderOnce();
+  });
+  resizeObserver.observe(container);
+
+  const intersectionObserver = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0];
+      isInView = entry ? entry.isIntersecting : true;
+      syncPlayback();
+    },
+    { threshold: 0.01 },
+  );
+  intersectionObserver.observe(container);
+
+  const handlePointerMove = (event: PointerEvent) => {
+    if (reducedMotion || !isInView || event.pointerType === "touch") {
+      return;
+    }
+    const rect = container.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+      return;
+    }
+    const nx = Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1);
+    const ny = Math.min(Math.max(1 - (event.clientY - rect.top) / rect.height, 0), 1);
     targetPointer.set(nx, ny);
   };
 
   const handleVisibilityChange = () => {
-    isHidden = document.hidden;
-    if (isHidden) {
-      stopLoop();
-    } else if (!reducedMotion || !colorsConverged()) {
-      ensureRunning();
-    }
+    isDocumentHidden = document.hidden;
+    syncPlayback();
   };
 
   const handleContextLost = (event: Event) => {
@@ -211,16 +235,13 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
     onContextLost?.();
   };
 
-  window.addEventListener("resize", handleResize, { passive: true });
-  window.addEventListener("pointermove", handlePointerMove, { passive: true });
+  container.addEventListener("pointermove", handlePointerMove, { passive: true });
   document.addEventListener("visibilitychange", handleVisibilityChange);
   canvas.addEventListener("webglcontextlost", handleContextLost);
 
   resize();
   renderOnce();
-  if (!reducedMotion && !isHidden) {
-    ensureRunning();
-  }
+  syncPlayback();
 
   return {
     setTheme(theme: ThemeMode) {
@@ -231,7 +252,16 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
       const nextPalette = MESH_PALETTES[theme];
       targetColors = nextPalette.colors.map(toThreeColor) as [Color, Color, Color, Color, Color];
       targetGrain = nextPalette.grainStrength;
-      ensureRunning();
+      if (canAnimate()) {
+        ensureRunning();
+      } else {
+        // Snap immediately when off-screen so returning to the hero shows the updated palette.
+        for (let i = 0; i < currentColors.length; i += 1) {
+          currentColors[i].copy(targetColors[i]);
+        }
+        material.uniforms.uGrain.value = targetGrain;
+        renderOnce();
+      }
     },
     setReducedMotion(reduced: boolean) {
       if (disposed || reduced === reducedMotion) {
@@ -244,14 +274,15 @@ export function createMeshEngine(options: MeshEngineOptions): MeshEngineHandle {
           stopLoop();
         }
       } else {
-        ensureRunning();
+        syncPlayback();
       }
     },
     dispose() {
       disposed = true;
       stopLoop();
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("pointermove", handlePointerMove);
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+      container.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       canvas.removeEventListener("webglcontextlost", handleContextLost);
       geometry.dispose();

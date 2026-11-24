@@ -9,6 +9,7 @@ interface MeshBackgroundProps {
 }
 
 export function MeshBackground({ theme, reducedMotion }: MeshBackgroundProps) {
+  const stageRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const engineRef = useRef<MeshEngineHandle | null>(null);
   const initialThemeRef = useRef(theme);
@@ -21,7 +22,8 @@ export function MeshBackground({ theme, reducedMotion }: MeshBackgroundProps) {
 
     const boot = async () => {
       const canvas = canvasRef.current;
-      if (!canvas) {
+      const container = stageRef.current;
+      if (!canvas || !container) {
         return;
       }
 
@@ -33,6 +35,7 @@ export function MeshBackground({ theme, reducedMotion }: MeshBackgroundProps) {
 
         const engine = createMeshEngine({
           canvas,
+          container,
           initialTheme: initialThemeRef.current,
           reducedMotion: initialReducedRef.current,
           onContextLost: () => {
@@ -50,7 +53,6 @@ export function MeshBackground({ theme, reducedMotion }: MeshBackgroundProps) {
       }
     };
 
-    // Defer Three.js chunk download until after first paint so CSS fallback renders immediately.
     const idleApi = window as Window & {
       requestIdleCallback?: (cb: IdleRequestCallback, opts?: IdleRequestOptions) => number;
       cancelIdleCallback?: (handle: number) => void;
@@ -94,7 +96,7 @@ export function MeshBackground({ theme, reducedMotion }: MeshBackgroundProps) {
   }, [reducedMotion]);
 
   return (
-    <div className="mesh-stage" aria-hidden="true">
+    <div ref={stageRef} className="mesh-stage" aria-hidden="true">
       <div className="mesh-fallback" />
       {!webglFailed && (
         <canvas ref={canvasRef} className={`mesh-canvas${webglReady ? " is-ready" : ""}`} />

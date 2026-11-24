@@ -3,8 +3,8 @@ export type ThemeMode = "light" | "dark";
 export const THEME_STORAGE_KEY = "portfolio-theme";
 
 export const THEME_META_COLORS: Record<ThemeMode, string> = {
-  light: "#f3f0ea",
-  dark: "#111214",
+  light: "#f7f4ee",
+  dark: "#141312",
 };
 
 export function resolveInitialTheme(
@@ -46,7 +46,7 @@ export function applyThemeToDocument(theme: ThemeMode, persist = true): void {
     try {
       window.localStorage.setItem(THEME_STORAGE_KEY, theme);
     } catch {
-      // Ignore storage errors in private browsing or restricted contexts.
+      // Ignore storage errors in restricted browsing contexts.
     }
   }
 }

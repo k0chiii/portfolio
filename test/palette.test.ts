@@ -7,10 +7,10 @@ describe("palette utilities", () => {
     expect(hexToRgbNormalized("#000000")).toEqual([0, 0, 0]);
     expect(hexToRgbNormalized("#ffffff")).toEqual([1, 1, 1]);
 
-    const [r, g, b] = hexToRgbNormalized("#f3f0ea");
-    expect(r).toBeCloseTo(243 / 255, 5);
-    expect(g).toBeCloseTo(240 / 255, 5);
-    expect(b).toBeCloseTo(234 / 255, 5);
+    const [r, g, b] = hexToRgbNormalized("#f7f4ee");
+    expect(r).toBeCloseTo(247 / 255, 5);
+    expect(g).toBeCloseTo(244 / 255, 5);
+    expect(b).toBeCloseTo(238 / 255, 5);
   });
 
   it("throws on malformed hex input", () => {
@@ -18,9 +18,10 @@ describe("palette utilities", () => {
     expect(() => hexToRgbNormalized("not-a-color")).toThrow("Invalid hex color");
   });
 
-  it("defines valid 5-color palettes for both light and dark modes", () => {
+  it("defines valid 5-color palettes with labels for both light and dark modes", () => {
     for (const mode of ["light", "dark"] as const) {
       const palette = MESH_PALETTES[mode];
+      expect(palette.label.length).toBeGreaterThan(0);
       expect(palette.colors).toHaveLength(5);
       for (const hex of palette.colors) {
         const rgb = hexToRgbNormalized(hex);

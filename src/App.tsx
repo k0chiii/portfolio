@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Header } from "./components/Header";
+import { ArrowUpRightIcon, MoonIcon, PauseIcon, PlayIcon, SunIcon } from "./components/Icons";
 import { MeshBackground } from "./components/MeshBackground";
-import { WorkCard } from "./components/WorkCard";
 import { WorkModal } from "./components/WorkModal";
 import { PORTFOLIO_CONTENT, type WorkItem } from "./content/portfolio";
+import { MESH_PALETTES } from "./lib/palette";
 import { applyThemeToDocument, getStoredTheme, type ThemeMode } from "./lib/theme";
 
 function getSystemReducedMotion(): boolean {
@@ -21,12 +22,11 @@ export function App() {
   );
   const [userMotionPaused, setUserMotionPaused] = useState<boolean>(false);
   const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "fallback">("idle");
 
   const modalTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const copyTimerRef = useRef<number | null>(null);
-
   const effectiveReducedMotion = systemReducedMotion || userMotionPaused;
+  const paletteLabel = MESH_PALETTES[theme].label;
+  const workCount = String(PORTFOLIO_CONTENT.works.length).padStart(2, "0");
 
   useEffect(() => {
     applyThemeToDocument(theme, false);
@@ -39,14 +39,6 @@ export function App() {
     };
     media.addEventListener("change", handleChange);
     return () => media.removeEventListener("change", handleChange);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (copyTimerRef.current !== null) {
-        window.clearTimeout(copyTimerRef.current);
-      }
-    };
   }, []);
 
   const handleToggleTheme = useCallback(() => {
@@ -73,171 +65,183 @@ export function App() {
     });
   }, []);
 
-  const handleCopyEmail = useCallback(async () => {
-    if (copyTimerRef.current !== null) {
-      window.clearTimeout(copyTimerRef.current);
-    }
-
-    try {
-      await navigator.clipboard.writeText(PORTFOLIO_CONTENT.email);
-      setCopyState("copied");
-    } catch {
-      setCopyState("fallback");
-    }
-
-    copyTimerRef.current = window.setTimeout(() => {
-      setCopyState("idle");
-    }, 2200);
-  }, []);
-
   return (
-    <div id="top" className="page-shell">
+    <div id="top" className="page">
       <a className="skip-link" href="#main">
-        メインコンテンツへスキップ
+        Skip to content
       </a>
 
-      <MeshBackground theme={theme} reducedMotion={effectiveReducedMotion} />
+      <section className="hero-field" aria-labelledby="hero-heading">
+        <MeshBackground theme={theme} reducedMotion={effectiveReducedMotion} />
 
-      <Header
-        monogram={PORTFOLIO_CONTENT.monogram}
-        theme={theme}
-        motionPaused={effectiveReducedMotion}
-        onToggleTheme={handleToggleTheme}
-        onToggleMotion={handleToggleMotion}
-      />
+        <Header brand={PORTFOLIO_CONTENT.brand} />
 
-      <main id="main" className="page-main">
-        <section className="hero-section" aria-labelledby="hero-heading">
-          <div className="hero-eyebrow">
-            <span className="status-dot" aria-hidden="true" />
-            <span>{PORTFOLIO_CONTENT.availability}</span>
-            <span className="eyebrow-sep" aria-hidden="true">
-              /
-            </span>
-            <span>{PORTFOLIO_CONTENT.location}</span>
-          </div>
+        <div className="container hero-body">
+          <div className="hero-copy">
+            <h1 id="hero-heading" className="hero-title">
+              {PORTFOLIO_CONTENT.headline}
+            </h1>
+            <p className="hero-sub">{PORTFOLIO_CONTENT.subhead}</p>
 
-          <h1 id="hero-heading" className="hero-title">
-            {PORTFOLIO_CONTENT.heroLead}
-          </h1>
-
-          <p className="hero-sub">{PORTFOLIO_CONTENT.heroSub}</p>
-
-          <div className="hero-meta-row">
-            <div>
-              <p className="meta-label">Name</p>
-              <p className="meta-value">{PORTFOLIO_CONTENT.name}</p>
-            </div>
-            <div>
-              <p className="meta-label">Focus</p>
-              <p className="meta-value">{PORTFOLIO_CONTENT.role}</p>
+            <div className="hero-actions">
+              <a className="button-primary" href="#work">
+                View work
+              </a>
+              <a
+                className="link-secondary"
+                href={PORTFOLIO_CONTENT.links[0]?.href ?? "#links"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>GitHub</span>
+                <ArrowUpRightIcon />
+              </a>
             </div>
           </div>
-        </section>
+        </div>
 
-        <section id="works" className="content-section" aria-labelledby="works-heading">
-          <div className="section-header">
-            <p className="section-kicker">01 / Selected Works</p>
-            <h2 id="works-heading" className="section-title">
-              Works
-            </h2>
-          </div>
-
-          {PORTFOLIO_CONTENT.works.length > 0 ? (
-            <div className="works-grid">
-              {PORTFOLIO_CONTENT.works.map((work) => (
-                <WorkCard key={work.id} work={work} onSelect={handleSelectWork} />
-              ))}
+        <div className="field-caption-bar">
+          <div className="container field-caption-inner">
+            <div className="field-plate">
+              <span className="mono-figure">Field 01</span>
+              <span className="meta-dot" aria-hidden="true">
+                /
+              </span>
+              <span>{paletteLabel}</span>
             </div>
-          ) : (
-            <div className="empty-surface">
-              <p className="empty-title">Selected works are being curated.</p>
-              <p className="empty-copy">
-                <code>src/content/portfolio.ts</code> に作品を追加すると、ここに自動で並びます。
+
+            <div className="field-controls">
+              <button
+                type="button"
+                className="control-button"
+                onClick={handleToggleMotion}
+                aria-pressed={effectiveReducedMotion}
+              >
+                {effectiveReducedMotion ? <PlayIcon /> : <PauseIcon />}
+                <span>{effectiveReducedMotion ? "Still" : "Motion"}</span>
+              </button>
+
+              <button
+                type="button"
+                className="control-button"
+                onClick={handleToggleTheme}
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+                <span>{theme === "dark" ? "Light" : "Dark"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main id="main" className="content-area">
+        <section id="work" className="catalogue-section" aria-labelledby="work-heading">
+          <div className="container section-grid">
+            <div className="section-rail">
+              <h2 id="work-heading" className="section-label">
+                Work
+              </h2>
+              <span className="section-count mono-figure">{workCount}</span>
+            </div>
+
+            <div className="section-body">
+              {PORTFOLIO_CONTENT.works.length > 0 ? (
+                <ul className="catalogue-list">
+                  {PORTFOLIO_CONTENT.works.map((work) => (
+                    <li key={work.id} className="catalogue-item">
+                      <button
+                        type="button"
+                        className="catalogue-row"
+                        onClick={(event) => handleSelectWork(work, event.currentTarget)}
+                      >
+                        <span className="row-year mono-figure">{work.year}</span>
+                        <span className="row-main">
+                          <span className="row-title">{work.title}</span>
+                          <span className="row-summary">{work.summary}</span>
+                        </span>
+                        <span className="row-category">{work.category}</span>
+                        <span className="row-icon">
+                          <ArrowUpRightIcon />
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="empty-note">
+                  Entries will be added in <code>src/content/portfolio.ts</code>.
+                </p>
+              )}
+
+              <p className="section-footnote">
+                More projects will be listed here as they are published.
               </p>
             </div>
-          )}
+          </div>
         </section>
 
-        <section id="about" className="content-section" aria-labelledby="about-heading">
-          <div className="section-header">
-            <p className="section-kicker">02 / Profile</p>
-            <h2 id="about-heading" className="section-title">
-              {PORTFOLIO_CONTENT.aboutTitle}
-            </h2>
-          </div>
-
-          <div className="about-grid">
-            <div className="about-copy glass-panel">
-              {PORTFOLIO_CONTENT.aboutParagraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
+        <section id="about" className="catalogue-section" aria-labelledby="about-heading">
+          <div className="container section-grid">
+            <div className="section-rail">
+              <h2 id="about-heading" className="section-label">
+                About
+              </h2>
             </div>
 
-            <div className="about-focus glass-panel">
-              <p className="meta-label">Focus Areas</p>
-              <ul className="focus-list">
-                {PORTFOLIO_CONTENT.focusAreas.map((area) => (
-                  <li key={area}>{area}</li>
+            <div className="section-body">
+              <div className="prose">
+                {PORTFOLIO_CONTENT.aboutParagraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+
+              <ul className="discipline-list" aria-label="Focus areas">
+                {PORTFOLIO_CONTENT.disciplines.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
               </ul>
             </div>
           </div>
         </section>
 
-        <section id="contact" className="content-section" aria-labelledby="contact-heading">
-          <div className="section-header">
-            <p className="section-kicker">03 / Connect</p>
-            <h2 id="contact-heading" className="section-title">
-              Contact &amp; Links
-            </h2>
-          </div>
-
-          <div className="contact-panel glass-panel">
-            <div className="contact-primary">
-              <p className="meta-label">Direct</p>
-              <div className="email-row">
-                <a className="email-link" href={`mailto:${PORTFOLIO_CONTENT.email}`}>
-                  {PORTFOLIO_CONTENT.email}
-                </a>
-                <button
-                  type="button"
-                  className="copy-button"
-                  onClick={() => void handleCopyEmail()}
-                >
-                  {copyState === "copied"
-                    ? "Copied ✓"
-                    : copyState === "fallback"
-                      ? "Use mailto"
-                      : "Copy"}
-                </button>
-              </div>
+        <section id="links" className="catalogue-section" aria-labelledby="links-heading">
+          <div className="container section-grid">
+            <div className="section-rail">
+              <h2 id="links-heading" className="section-label">
+                Links
+              </h2>
             </div>
 
-            <ul className="links-list">
-              {PORTFOLIO_CONTENT.links.map((link) => (
-                <li key={link.label}>
-                  <a
-                    className="external-link"
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="external-label">{link.label}</span>
-                    <span className="external-handle">{link.handle} ↗</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div className="section-body">
+              <ul className="links-table">
+                {PORTFOLIO_CONTENT.links.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      className="link-row"
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="link-label">{link.label}</span>
+                      <span className="link-value mono-figure">{link.value}</span>
+                      <span className="row-icon">
+                        <ArrowUpRightIcon />
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
       </main>
 
       <footer className="site-footer">
-        <span>
-          © {new Date().getFullYear()} {PORTFOLIO_CONTENT.name}
-        </span>
-        <span>Built with Vite+ &amp; Cloudflare Workers</span>
+        <div className="container footer-inner">
+          <span>{PORTFOLIO_CONTENT.domain}</span>
+          <span className="mono-figure">© {new Date().getFullYear()}</span>
+        </div>
       </footer>
 
       <WorkModal work={selectedWork} onClose={handleCloseModal} />

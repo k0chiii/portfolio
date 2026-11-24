@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import type { WorkItem } from "../content/portfolio";
+import { ArrowUpRightIcon, CloseIcon } from "./Icons";
 
 interface WorkModalProps {
   work: WorkItem | null;
@@ -52,58 +53,47 @@ export function WorkModal({ work, onClose }: WorkModalProps) {
         aria-modal="true"
         aria-labelledby="work-modal-title"
       >
-        <div
-          className="modal-visual"
-          style={{
-            background: `radial-gradient(circle at 20% 25%, ${work.accent[0]}, transparent 65%), radial-gradient(circle at 80% 75%, ${work.accent[1]}, transparent 70%)`,
-          }}
-        >
-          <span className="work-index">{work.index}</span>
+        <div className="modal-header">
+          <div className="modal-meta">
+            <span className="mono-figure">{work.year}</span>
+            <span className="meta-dot" aria-hidden="true">
+              /
+            </span>
+            <span>{work.category}</span>
+          </div>
+
           <button
             ref={closeButtonRef}
             type="button"
-            className="modal-close"
+            className="icon-control"
             onClick={onClose}
-            aria-label="モーダルを閉じる"
+            aria-label="Close details"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M4 4L12 12M12 4L4 12"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
+            <CloseIcon />
           </button>
         </div>
 
-        <div className="modal-content">
-          <div className="modal-kicker">
-            <span>{work.category}</span>
-            <span>·</span>
-            <span>{work.year}</span>
-            <span>·</span>
-            <span>{work.role}</span>
-          </div>
-
+        <div className="modal-body">
           <h2 id="work-modal-title" className="modal-title">
             {work.title}
           </h2>
-
           <p className="modal-detail">{work.detail}</p>
 
-          <ul className="tag-list">
-            {work.stack.map((tech) => (
-              <li key={tech} className="tag-pill">
-                {tech}
-              </li>
-            ))}
-          </ul>
+          <dl className="modal-specs">
+            <dt>Stack</dt>
+            <dd>{work.stack.join(", ")}</dd>
+          </dl>
 
           {work.url && (
             <div className="modal-actions">
-              <a className="primary-link" href={work.url} target="_blank" rel="noopener noreferrer">
-                Visit project ↗
+              <a
+                className="button-primary"
+                href={work.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Open repository</span>
+                <ArrowUpRightIcon />
               </a>
             </div>
           )}
