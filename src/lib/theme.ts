@@ -4,7 +4,7 @@ export const THEME_STORAGE_KEY = "portfolio-theme";
 
 export const THEME_META_COLORS: Record<ThemeMode, string> = {
   light: "#f7f4ee",
-  dark: "#141312",
+  dark: "#121110",
 };
 
 export function resolveInitialTheme(

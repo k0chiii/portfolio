@@ -107,10 +107,10 @@ code {
   position: absolute;
   inset: -12%;
   background:
-    radial-gradient(56% 52% at 20% 24%, var(--fallback-c1), transparent 72%),
-    radial-gradient(54% 50% at 84% 28%, var(--fallback-c2), transparent 72%),
-    radial-gradient(52% 54% at 32% 84%, var(--fallback-c3), transparent 74%),
-    radial-gradient(54% 48% at 78% 80%, var(--fallback-c4), transparent 74%), var(--bg-page);
+    radial-gradient(52% 56% at 80% 48%, var(--fallback-c1), transparent 70%),
+    radial-gradient(48% 52% at 64% 78%, var(--fallback-c2), transparent 72%),
+    radial-gradient(50% 48% at 38% 28%, var(--fallback-c3), transparent 74%),
+    radial-gradient(48% 50% at 14% 78%, var(--fallback-c4), transparent 72%), var(--bg-page);
 }
 
 .mesh-canvas {
@@ -277,6 +277,13 @@ code {
   color: var(--text-secondary);
 }
 
+.field-swatch {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-signal);
+  flex-shrink: 0;
+}
+
 .field-controls {
   display: flex;
   align-items: center;
@@ -419,7 +426,7 @@ code {
 
 .catalogue-row:hover .row-icon,
 .link-row:hover .row-icon {
-  color: var(--text-primary);
+  color: var(--accent);
 }
 
 .empty-note,

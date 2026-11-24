@@ -12,22 +12,24 @@
   --bg-surface: #fdfbf7;
   --bg-raised: #efe9df;
 
-  --text-primary: #1f1b16;
-  --text-secondary: #5e554a;
-  --text-muted: #6f665b;
+  --text-primary: #1c1917;
+  --text-secondary: #564f47;
+  --text-muted: #6d655c;
 
-  --hairline: rgba(31, 27, 22, 0.1);
-  --hairline-strong: rgba(31, 27, 22, 0.2);
+  --hairline: rgba(28, 25, 23, 0.1);
+  --hairline-strong: rgba(28, 25, 23, 0.2);
 
-  --accent: #8f4f36;
-  --button-fill: #1f1b16;
+  /* Single neon-orange accent family */
+  --accent: #d93d00;
+  --accent-signal: #ff4f14;
+  --button-fill: #1c1917;
   --button-text: #f7f4ee;
-  --control-hover: rgba(31, 27, 22, 0.06);
+  --control-hover: rgba(28, 25, 23, 0.06);
 
-  --fallback-c1: rgba(213, 191, 169, 0.85);
-  --fallback-c2: rgba(178, 195, 198, 0.8);
-  --fallback-c3: rgba(204, 174, 173, 0.72);
-  --fallback-c4: rgba(192, 202, 185, 0.74);
+  --fallback-c1: rgba(255, 79, 20, 0.78);
+  --fallback-c2: rgba(255, 130, 56, 0.68);
+  --fallback-c3: rgba(240, 200, 173, 0.62);
+  --fallback-c4: rgba(207, 212, 214, 0.56);
 
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -41,25 +43,26 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Warm neutral ramp — Dark */
-  --bg-page: #141312;
-  --bg-surface: #1c1a18;
-  --bg-raised: #262421;
+  /* Warm obsidian ramp — Dark */
+  --bg-page: #121110;
+  --bg-surface: #1a1817;
+  --bg-raised: #24211f;
 
-  --text-primary: #efe9de;
-  --text-secondary: #aaa398;
-  --text-muted: #8d867b;
+  --text-primary: #f2ece4;
+  --text-secondary: #ada69d;
+  --text-muted: #8c857c;
 
-  --hairline: rgba(239, 233, 222, 0.1);
-  --hairline-strong: rgba(239, 233, 222, 0.2);
+  --hairline: rgba(242, 236, 228, 0.1);
+  --hairline-strong: rgba(242, 236, 228, 0.2);
 
-  --accent: #d48c6e;
-  --button-fill: #efe9de;
-  --button-text: #141312;
-  --control-hover: rgba(239, 233, 222, 0.08);
+  --accent: #ff6b2b;
+  --accent-signal: #ff4d00;
+  --button-fill: #f2ece4;
+  --button-text: #121110;
+  --control-hover: rgba(242, 236, 228, 0.08);
 
-  --fallback-c1: rgba(39, 49, 64, 0.88);
-  --fallback-c2: rgba(57, 40, 43, 0.82);
-  --fallback-c3: rgba(30, 48, 46, 0.8);
-  --fallback-c4: rgba(71, 55, 44, 0.7);
+  --fallback-c1: rgba(255, 77, 0, 0.78);
+  --fallback-c2: rgba(255, 123, 36, 0.58);
+  --fallback-c3: rgba(110, 29, 8, 0.76);
+  --fallback-c4: rgba(29, 34, 41, 0.7);
 }

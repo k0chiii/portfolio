@@ -103,6 +103,7 @@ export function App() {
         <div className="field-caption-bar">
           <div className="container field-caption-inner">
             <div className="field-plate">
+              <span className="field-swatch" aria-hidden="true" />
               <span className="mono-figure">Field 01</span>
               <span className="meta-dot" aria-hidden="true">
                 /
