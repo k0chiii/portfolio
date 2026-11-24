@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Personal portfolio — design, engineering, and visual craft."
+    />
+    <meta name="theme-color" content="#f3f0ea" />
+    <title>Portfolio</title>
+    <link rel="icon" href="/favicon-light.svg" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)" />
+    <script>
+      (() => {
+        try {
+          const saved = localStorage.getItem("portfolio-theme");
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme =
+            saved === "light" || saved === "dark" ? saved : prefersDark ? "dark" : "light";
+          document.documentElement.dataset.theme = theme;
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            meta.setAttribute("content", theme === "dark" ? "#111214" : "#f3f0ea");
+          }
+        } catch {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

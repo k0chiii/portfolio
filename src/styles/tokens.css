@@ -1,0 +1,68 @@
+:root {
+  color-scheme: light;
+
+  --font-serif:
+    "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Hiragino Mincho ProN", "Yu Mincho",
+    Georgia, serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+
+  /* Light: Paper & Mist */
+  --bg-ground: #f3f0ea;
+  --ink-primary: #1d1b18;
+  --ink-secondary: #58524a;
+  --ink-muted: #7b746a;
+
+  --surface: rgba(252, 250, 246, 0.56);
+  --surface-strong: rgba(252, 250, 246, 0.78);
+  --surface-hover: rgba(255, 253, 250, 0.72);
+  --ring: rgba(34, 30, 25, 0.11);
+  --ring-strong: rgba(34, 30, 25, 0.22);
+  --shadow-soft: 0 20px 50px -28px rgba(45, 38, 30, 0.22);
+
+  --accent-dot: #7c8b7f;
+  --focus-ring: rgba(29, 27, 24, 0.6);
+  --scrollbar-thumb: rgba(29, 27, 24, 0.18);
+
+  --fallback-c1: rgba(215, 198, 182, 0.78);
+  --fallback-c2: rgba(183, 198, 201, 0.72);
+  --fallback-c3: rgba(208, 186, 181, 0.65);
+  --fallback-c4: rgba(195, 203, 189, 0.68);
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 180ms var(--ease-out);
+  --transition-medium: 320ms var(--ease-out);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Dark: Obsidian & Velvet */
+  --bg-ground: #111214;
+  --ink-primary: #efece6;
+  --ink-secondary: #aba59c;
+  --ink-muted: #7f7a73;
+
+  --surface: rgba(22, 24, 29, 0.5);
+  --surface-strong: rgba(22, 24, 29, 0.8);
+  --surface-hover: rgba(32, 35, 42, 0.66);
+  --ring: rgba(239, 236, 230, 0.12);
+  --ring-strong: rgba(239, 236, 230, 0.25);
+  --shadow-soft: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+
+  --accent-dot: #8fa99f;
+  --focus-ring: rgba(239, 236, 230, 0.68);
+  --scrollbar-thumb: rgba(239, 236, 230, 0.2);
+
+  --fallback-c1: rgba(35, 43, 56, 0.85);
+  --fallback-c2: rgba(51, 39, 44, 0.78);
+  --fallback-c3: rgba(29, 46, 45, 0.78);
+  --fallback-c4: rgba(63, 51, 44, 0.65);
+}
